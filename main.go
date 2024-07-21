@@ -24,7 +24,7 @@ func DetectAbusiveHandler(c *fiber.Ctx)error{
 	}
 	isAbusive,abusiveWord:=DetectAbusive(message.Text)
 	if isAbusive{
-		return c.JSON(fiber.Map{"abusive word:":abusiveWord})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"abusive word:":abusiveWord})
 	}
 	return nil
 }
