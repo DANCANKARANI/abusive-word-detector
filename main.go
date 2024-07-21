@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
+	"strconv"
 
+	"github.com/TwiN/go-away"
 	"github.com/gofiber/fiber/v2"
-	 "github.com/TwiN/go-away"
 )
 type Message struct{
 	Text string `json:"text"`
@@ -34,5 +35,7 @@ func DetectAbusive(message string)(bool,string){
 		abusive:=goaway.ExtractProfanity(message)
 		return true,abusive
 	}
+	number,_:=strconv.Atoi("1")
+	fmt.Println(number)
 	return false,""
 }
