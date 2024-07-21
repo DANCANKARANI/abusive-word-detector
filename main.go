@@ -2,8 +2,10 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/TwiN/go-away"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 type Message struct{
 	Text string `json:"text"`
@@ -11,9 +13,12 @@ type Message struct{
 }
 func main() {
 	fmt.Println("Welcome....")
-	abusive,_:=DetectAbusive("fuck this asshole")
-	fmt.Println(abusive)
 	app:=fiber.New()
+	app.Use(cors.New(cors.Config{
+        AllowOrigins: "*", // Allow all origins, adjust as needed
+        AllowMethods: "GET,POST,HEAD,PUT,DELETE,PATCH,OPTIONS",
+        AllowHeaders: "Origin, Content-Type, Accept",
+    }))
 	app.Post("api/v1/message",DetectAbusiveHandler)
 	app.Listen(":3000")
 }
@@ -24,7 +29,7 @@ func DetectAbusiveHandler(c *fiber.Ctx)error{
 	}
 	isAbusive,abusiveWord:=DetectAbusive(message.Text)
 	if isAbusive{
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"abusive word:":abusiveWord})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"abusive:":abusiveWord})
 	}
 	return nil
 }
